@@ -8,3 +8,5 @@ keyboard
 pyautogui
 pyperclip
 ipykernel
+gtts
+elevenlabs
