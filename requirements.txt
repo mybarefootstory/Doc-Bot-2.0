@@ -1,3 +1,10 @@
 groq
 python-dotenv
-
+speechrecognition
+pydub
+pyaudio
+pynput
+keyboard
+pyautogui
+pyperclip
+ipykernel
