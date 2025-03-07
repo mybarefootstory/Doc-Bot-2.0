@@ -106,5 +106,5 @@ def text_to_speech_with_elevenlabs(input_text, output_filepath):
         print(f"An error occurred while trying to play the audio: {e}")
 
 input_text = "Hi This is Akash, An aspiring AI Engineer."
-text_to_speech_with_elevenlabs(input_text, output_filepath="elevenlabs_testing_autoplay.mp3")
+# text_to_speech_with_elevenlabs(input_text, output_filepath="elevenlabs_testing_autoplay.mp3")
 
