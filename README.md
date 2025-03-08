@@ -112,7 +112,7 @@ ELEVENLABS_API_KEY="your_elevenlabs_api_key"
 ## Contact
 For questions or inquiries, please contact the project maintainer:
 
-- Your Name - [Akash Kumar Swarnkar](mailto:akashkumarswarnkar7172@gmail.com)
+- Akash Kumar Swarnkar - [Gmail](mailto:akashkumarswarnkar7172@gmail.com)
 
 Project Link: [https://github.com/mybarefootstory/Doc-Bot-2.0](https://github.com/mybarefootstory/Doc-Bot-2.0)
 
