@@ -1,85 +1,46 @@
-
-# Step 1: Setup Audio recorder(ffmpeg & portaudio)
+# Step 1: Setup Audio recorder
 
 import os
 import wave
 import pyaudio
-import keyboard
-from datetime import datetime
 from pydub import AudioSegment
+from io import BytesIO
+import speech_recognition as sr
+import logging
 
-def record_audio(sample_rate=16000, channels=1, chunk=1024):
+def record_audio(file_path, timeout=20, phrase_time_limit=None):
     """
-    Record audio from the microphone while the SPACE button is held down.
+    Simplified function to record audio from the microphone and save it as an MP3 file.
+
+    Args:
+    file_path (str): Path to save the recorded audio file.
+    timeout (int): Maximum time to wait for a phrase to start (in seconds).
+    phrase_time_limit (int): Maximum time for the phrase to be recorded (in seconds).
     """
-    p = pyaudio.PyAudio()
-    stream = p.open(
-        format=pyaudio.paInt16,
-        channels=channels,
-        rate=sample_rate,
-        input=True,
-        frames_per_buffer=chunk,
-    )
-
-    print("Press and hold the SPACE button to start recording...")
-    frames = []
-
-    keyboard.wait("space")  # Wait for SPACE button to be pressed
-    print("Recording... (Release SPACE to stop)")
-
-    while keyboard.is_pressed("space"):
-        data = stream.read(chunk)
-        frames.append(data)
-
-    print("Recording finished.")
-    stream.stop_stream()
-    stream.close()
-    p.terminate()
-
-    # Return frames, sample rate, and sample width
-    return frames, sample_rate, p.get_sample_size(pyaudio.paInt16)
-
-def save_audio(frames, sample_rate, sample_width):
-    """
-    Save recorded audio to a WAV file and convert it to MP3 in the current directory.
-    """
-    # Create a unique filename using the current timestamp
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    wav_filename = f"recording_{timestamp}.wav"
-    mp3_filename = f"recording_{timestamp}.mp3"
-    wav_filepath = os.path.join(os.getcwd(), wav_filename)
-    mp3_filepath = os.path.join(os.getcwd(), mp3_filename)
-
-    # Save the WAV file
-    with wave.open(wav_filepath, "wb") as wf:
-        wf.setnchannels(1)
-        wf.setsampwidth(sample_width)
-        wf.setframerate(sample_rate)
-        wf.writeframes(b"".join(frames))
-
-    # Convert WAV to MP3
-    audio = AudioSegment.from_wav(wav_filepath)
-    audio.export(mp3_filepath, format="mp3")
-
-    # Optionally, remove the WAV file after conversion
-    os.remove(wav_filepath)
-
-    return mp3_filepath
-
-def get_audio_filepath():
+    recognizer = sr.Recognizer()
+    
     try:
-        # Record audio
-        frames, sample_rate, sample_width = record_audio()
-        # Save audio to a file in the current directory
-        audio_path = save_audio(frames, sample_rate, sample_width)
-        print(f"Audio saved to {audio_path}")
-        return audio_path
-    except KeyboardInterrupt:
-        print("\nRecording stopped by user.")
+        with sr.Microphone() as source:
+            print("Adjusting for ambient noise...")
+            recognizer.adjust_for_ambient_noise(source, duration=1)
+            print("Start speaking now...")
+            
+            # Record the audio
+            audio_data = recognizer.listen(source, timeout=timeout, phrase_time_limit=phrase_time_limit)
+            print("Recording complete.")
+            
+            # Convert the recorded audio to an MP3 file
+            wav_data = audio_data.get_wav_data()
+            audio_segment = AudioSegment.from_wav(BytesIO(wav_data))
+            audio_segment.export(file_path, format="mp3", bitrate="128k")
+            
+            print(f"Audio saved to {file_path}")
 
-audio_path = get_audio_filepath()
-print(f"Audio file path: {audio_path}")
+    except Exception as e:
+        logging.error(f"An error occurred: {e}")
 
+# Example usage
+# record_audio("output.mp3", timeout=20, phrase_time_limit=10)
 
 
 # Step 2: Setup Speech to text-SST-model for transcription
@@ -105,8 +66,8 @@ def transcribe_with_groq(stt_model, audio_filepath, GROQ_API_KEY):
     )
     return transcription.text
 
-response=transcribe_with_groq(stt_model,audio_path,GROQ_API_KEY)
-print(response)
+# response=transcribe_with_groq(stt_model,audio_path,GROQ_API_KEY)
+# print(response)
 
 
 

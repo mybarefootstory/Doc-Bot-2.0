@@ -4,26 +4,21 @@ from dotenv import load_dotenv
 import base64
 
 # Step 1: Setup GROQ API Key
-# Load environment variables from a .env file
 load_dotenv()
 
 # Retrieve the GROQ API key from environment variables
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 
-# Step 2: Convert image to required format
-# Define the path to the image file
-image_path = "acne.jpg"
 
-# Open the image file in binary read mode
-with open(image_path, 'rb') as image_file:
-    # Encode the image to base64 format and decode to a UTF-8 string
-    encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+# Step 2: Convert image to required format
+def encode_image(image_path):   
+    image_file=open(image_path, "rb")
+    return base64.b64encode(image_file.read()).decode('utf-8')
+
 
 # Step 3: Setup Multimodal LLM
-# Import the Groq class from the groq module
 from groq import Groq
 
-# Define the model to be used for analysis
 model = "llama-3.2-90b-vision-preview"
 
 def analyze_image_with_query(query, model, encoded_image):
@@ -37,7 +32,7 @@ def analyze_image_with_query(query, model, encoded_image):
     """
     # Initialize the Groq client
     client = Groq()
-
+    
     # Construct the message payload with text and image data
     messages = [
         {

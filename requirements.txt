@@ -10,3 +10,4 @@ pyperclip
 ipykernel
 gtts
 elevenlabs
+gradio
