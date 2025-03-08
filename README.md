@@ -12,8 +12,6 @@ Doc-Bot-2.0 is an advanced medical chatbot that integrates voice and vision capa
 - [Environment Variables](#environment-variables)
 - [Future Scope and Improvements](#future-scope-and-improvements)
 - [Use Cases in Healthcare](#use-cases-in-healthcare)
-- [Contributing](#contributing)
-- [License](#license)
 - [Contact](#contact)
 
 ## Technology Stack
