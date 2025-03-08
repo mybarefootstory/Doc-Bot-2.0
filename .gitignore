@@ -2,4 +2,4 @@ venv/
 .env
 test.ipynb
 .gradio
-__pyache__
+__pycache__
