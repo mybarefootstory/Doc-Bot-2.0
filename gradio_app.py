@@ -45,7 +45,7 @@ iface = gr.Interface(
         gr.Textbox(label="Doctor's Response"),
         gr.Audio("Temp.mp3")
     ],
-    title="AI Doctor with Vision and Voice"
+    title="Doc-Bot-2.0"
 )
 
 iface.launch(share=True,debug=True)
